@@ -1,24 +1,21 @@
-FROM debian:bullseye
-
-RUN apt update
-RUN apt upgrade
-RUN apt install mariadb-server -y
-RUN apt install mariadb-client -y
+FROM alpine:3.18.6
 
 EXPOSE 3306
 
-COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+RUN apk update
+RUN apk upgrade
 
-RUN mkdir -p /var/run/mysqld
-RUN chown mysql:mysql /var/run/mysqld/
-RUN chmod -R 755 /var/run/mysqld/
+RUN apk add --no-cache mariadb mariadb-server-utils pwgen && \
+    rm -f /var/cache/apk/*
 
-RUN mkdir -p /var/lib/mysql
-RUN chown mysql:mysql /var/lib/mysql/
-RUN chmod -R 755 /var/lib/mysql/
+RUN mkdir /var/log/mysql/
+RUN chmod 777 /var/lib/mysql
 
-COPY ./tools/setup.sh ./
-RUN chmod +rx ./setup.sh
+COPY ./conf/my.cnf /etc/my.cnf
 
-ENTRYPOINT ["bash", "./setup.sh"]
+COPY ./tools/setup.sh /scripts/setup.sh
+RUN chmod -R 755 /scripts
 
+VOLUME ["/var/lib/mysql"]
+
+ENTRYPOINT ["/scripts/setup.sh"]
