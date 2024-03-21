@@ -1,16 +1,11 @@
 #!/bin/sh
-
-chown -R mysql:mysql /run/mysqld
+# set -eux
 
 if [ -d /var/lib/mysql/mysql ]; then
 	echo "Setup.sh : MySQL directory already present, skipping creation"
-	chown -R mysql:mysql /var/lib/mysql
 else
 	echo "Setup.sh : MySQL data directory not found, creating initial DBs"
-
-	chown -R mysql:mysql /var/lib/mysql
-
-	mysql_install_db --user=mysql --ldata=/var/lib/mysql > /dev/null
+	mysql_install_db --user=root --no-defaults --datadir=/var/lib/mysql > /dev/null
 
 	if [ "$MYSQL_ROOT_PASSWORD" = "" ]; then
 		MYSQL_ROOT_PASSWORD=`pwgen 16 1`
@@ -35,8 +30,7 @@ SET PASSWORD FOR 'root'@'localhost'=PASSWORD('${MYSQL_ROOT_PASSWORD}') ;
 DROP DATABASE IF EXISTS test ;
 FLUSH PRIVILEGES ;
 EOF
-
-	if [ "$MYSQL_DATABASE" != "" ]; then
+    if [ "$MYSQL_DATABASE" != "" ]; then
 	    echo "Setup.sh : Creating database: $MYSQL_DATABASE"
 		if [ "$MYSQL_CHARSET" != "" ] && [ "$MYSQL_COLLATION" != "" ]; then
 			echo "Setup.sh : $MYSQL_DATABASE : character set [$MYSQL_CHARSET] and collation [$MYSQL_COLLATION]"
@@ -52,12 +46,11 @@ EOF
 		fi
 	fi
 
-	/usr/bin/mysqld --user=mysql --bootstrap --verbose=0 --skip-name-resolve --skip-networking=0 < $tfile
+	/usr/bin/mysqld --user=root --bootstrap --verbose=0 --skip-name-resolve --skip-networking=0 < $tfile
 	rm -f $tfile
     echo 'MySQL init done'
 fi
-
 echo "MySQL Server start"
-/usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0 $@
+/usr/bin/mysqld --user=root --console --skip-name-resolve --skip-networking=0
 echo "--- LOGS ---"
 cat /var/log/mysql/error.log

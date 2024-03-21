@@ -1,16 +1,31 @@
 version: ‘3’
 services:
   mariadb:
-    image: mariadb
+    image: mariadb${BUILD_TYPE:-production}
     container_name: mariadb
     # networks:
     # - inception
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
-    env_file: .env                
+      target: "${BUILD_TYPE:-production}"
+    env_file: .env
     volumes:
       - ./requirements/mariadb/db:/var/lib/mysql
     restart: unless-stopped
     expose:
       - 3306
+    # ports:
+    #   - 3306:3306
+  nginx:
+    image: nginx
+    container_name: nginx${BUILD_TYPE:-production}
+    # networks:
+    # - inception
+    build:
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+    env_file: .env
+    restart: unless-stopped
+    ports:
+      - ${NGINX_PORT:-443}:443

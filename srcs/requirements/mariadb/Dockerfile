@@ -1,21 +1,35 @@
-FROM alpine:3.18.6
+ARG ALPINE_VERSION=3.18.6
 
-EXPOSE 3306
+FROM alpine:${ALPINE_VERSION} AS base
 
 RUN apk update
 RUN apk upgrade
-
 RUN apk add --no-cache mariadb mariadb-server-utils pwgen && \
     rm -f /var/cache/apk/*
 
-RUN mkdir /var/log/mysql/
-RUN chmod 777 /var/lib/mysql
+RUN mkdir -p /var/log/mysql/
+RUN mkdir -p /run/mysqld
+
+EXPOSE 3306
+
+FROM base AS production
 
 COPY ./conf/my.cnf /etc/my.cnf
-
 COPY ./tools/setup.sh /scripts/setup.sh
-RUN chmod -R 755 /scripts
+
+RUN chmod -R +x /scripts
+VOLUME ["/var/lib/mysql"]
+
+ENTRYPOINT ["/scripts/setup.sh"]
+
+FROM base AS rootless
+
+ARG BUILD_TYPE=rootless
+
+COPY ./conf/my.rootless.cnf /etc/my.cnf
+COPY ./tools/setup.rootless.sh /scripts/setup.sh
 
 VOLUME ["/var/lib/mysql"]
 
+RUN chmod -R +x /scripts
 ENTRYPOINT ["/scripts/setup.sh"]
