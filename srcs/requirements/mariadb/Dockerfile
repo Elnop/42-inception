@@ -22,7 +22,7 @@ VOLUME ["/var/lib/mysql"]
 RUN chmod -R +x /scripts
 ENTRYPOINT ["/scripts/setup.sh"]
 
-FROM base AS production
+FROM base AS privileged
 
 COPY ./conf/my.cnf /etc/my.cnf
 COPY ./tools/setup.sh /scripts/setup.sh
