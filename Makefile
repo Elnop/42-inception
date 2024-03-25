@@ -43,3 +43,6 @@ clean: clean-containers clean-images
 # rtfm
 man:
 	man docker-compose
+
+rm-db:
+	rm -rf ./srcs/requirements/mariadb/db
