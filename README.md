@@ -7,39 +7,39 @@ This repository provides an automated service deployment for WordPress using the
 1. [Dependencies](#dependencies)
 2. [Usage](#usage)
 3. [Parameters](#parameters)
-	1. [Nginx](#parameters-nginx)
-	2. [MySql](#parameters-mysql)
-	3. [Wordpress](#parameters-wordpress)
+	1. [Nginx](#nginx-parameters)
+	2. [MySql](#mysql-parameters)
+	3. [Wordpress](#wordpress-parameters)
 4. [Start service](#Start service)
 
-## Dependencies {#dependencies}
+## Dependencies
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/linux/#install-using-the-repository)
 - [make (optional)](https://fr.wikipedia.org/wiki/Make)
 
-## Usage {#usage}
+## Usage
 
 ```bash
 git clone git@github.com:Elnop/42-inception.git lperroti-42-inception
 ```
 
-## Parameters {#parameters}
+## Parameters
 
 Set all variables in /srcs/.env
 
-### Nginx {#parameters-nginx}
+### Nginx parameters
 
 - **NGINX_PORT** *443 (default)*
 
-### MySql {#parameters-mysql}
+### MySql parameters
 
 - **MYSQL_ROOT_PASSWORD** *(generate if unset)*
 - **MYSQL_USER** *(required)*
 - **MYSQL_PASSWORD** *(required)*
 - **BUILD_TYPE** *privileged (default) or rootless*
 
-### Wordpress {#parameters-wordpress}
+### Wordpress parameters
 
 ## Start service
 
@@ -58,3 +58,13 @@ make clean
 ```
 
 [more make rules](./Makefile)
+
+## Links
+
+- [PHP Doc](https://www.php.net/docs.php)
+
+- [Docker Reference](https://docs.docker.com/reference/)
+
+- [Yobasystems alpine-mariadb](https://github.com/yobasystems/alpine-mariadb)
+
+- [Digitalocean how-to-install-wordpress-with-docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose#step-1-defining-the-web-server-configuration)
