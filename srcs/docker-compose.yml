@@ -1,14 +1,14 @@
 # Variables can be set in .env file:
-#   BUILD_TYPE: production (default) or rootless
+#   BUILD_TYPE: privileged (default) or rootless
 #   NGINX_PORT: 443 (default)
-version: ‘3’
+#version: 3
 services:
   mariadb:
-    image: mariadb-${BUILD_TYPE:-production}
-    container_name: mariadb-${BUILD_TYPE:-production}
+    image: mariadb-${BUILD_TYPE:-privileged}
+    container_name: mariadb-${BUILD_TYPE:-privileged}
     build:
       context: ./requirements/mariadb
-      target: "${BUILD_TYPE:-production}"
+      target: "${BUILD_TYPE:-privileged}"
     env_file: .env
     volumes:
       - ./requirements/mariadb/db:/var/lib/mysql
@@ -18,8 +18,8 @@ services:
     # ports:
     #   - 3306:3306
   nginx:
-    image: nginx
-    container_name: nginx
+    image: nginx-${NGINX_PORT:-443}
+    container_name: nginx-${NGINX_PORT:-443}
     build:
       context: ./requirements/nginx
     env_file: .env
