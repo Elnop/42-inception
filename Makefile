@@ -1,6 +1,7 @@
+include srcs/.env
+
 COMPOSE_FILE	:= ./srcs/docker-compose.yml
-BUILD_MOD		:= rootless # production or rootless
-IMAGE_NAMES		:= mariadb-${BUILD_MOD} nginx-${BUILD_MOD}
+IMAGE_NAMES		:= mariadb-${BUILD_TYPE} nginx-${NGINX_PORT}
 
 # Build, (re)create, start and attach to containers
 up: build
@@ -38,3 +39,7 @@ clean-containers: stop
 	docker-compose -f ${COMPOSE_FILE} rm
 
 clean: clean-containers clean-images
+
+# rtfm
+man:
+	man docker-compose
