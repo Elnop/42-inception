@@ -27,16 +27,18 @@ set all variables in /srcs/.env
 
 ### 
 
-## Start Server
+## Start service
 
 using [make](https://fr.wikipedia.org/wiki/Make)
+
+**build and start service as a deamon**
 
 ```bash
 make
 
 ```
 
-**stop server and clean container and images**
+**Stop service and clean container and images**
 ```bash
 make clean
 ```
