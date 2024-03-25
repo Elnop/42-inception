@@ -7,9 +7,9 @@ This repository provides an automated service deployment for WordPress using the
 1. [Dependencies](#dependencies)
 2. [Usage](#usage)
 3. [Parameters](#parameters)
-	1. [Nginx](#nginx-parameters)
-	2. [MySql](#mysql-parameters)
-	3. [Wordpress](#wordpress-parameters)
+	- [Nginx](#nginx-parameters)
+	- [MySql](#mysql-parameters)
+	- [Wordpress](#wordpress-parameters)
 4. [Start service](#Start service)
 
 ## Dependencies
