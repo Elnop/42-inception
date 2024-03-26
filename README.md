@@ -1,27 +1,57 @@
 # 42 - Inception
 
-This repository provides an automated service deployment for WordPress using the LEMP stack (Linux, Nginx, MySQL/MariaDB, PHP).
+This project serves as a learning exercise, employing Docker with Alpine to facilitate automated deployment of WordPress using the LEMP stack (Linux, Nginx, MySQL/MariaDB, PHP).
 
 ## Summary
 
-1. [Dependencies](#dependencies)
-2. [Usage](#usage)
+1. [Host dependencies](#host-dependencies)
+2. [Usage exemple](#usage-exemple)
+	- [Download](#download)
+	- [Minimal setup](minimal-setup)
 3. [Parameters](#parameters)
 	- [Nginx](#nginx-parameters)
 	- [MySql](#mysql-parameters)
 	- [Wordpress](#wordpress-parameters)
-4. [Start service](#Start service)
+	- [Build Type](#build-type)
+4. [Ready for advanced use](#ready-for-advanced-use)
 
-## Dependencies
+## Host dependencies
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/linux/#install-using-the-repository)
 - [make (optional)](https://fr.wikipedia.org/wiki/Make)
 
-## Usage
+## Usage exemple
+
+### Download
 
 ```bash
 git clone git@github.com:Elnop/42-inception.git lperroti-42-inception
+cd lperroti-42-inception
+```
+
+### Minimal setup
+
+```bash
+cp ./srcs/.env.exemple ./srcs/.env
+cat ./srcs/.env
+```
+
+replace the "<>" tags with your information in ``./srcs/.env`` file
+
+more informations of [parameters](#parameters)
+
+### Ready to use
+
+**build and start service as a daemon**
+
+```bash
+make
+```
+
+**Stop service and clean docker**
+```bash
+make clean
 ```
 
 ## Parameters
@@ -37,27 +67,24 @@ Set all variables in /srcs/.env
 - **MYSQL_ROOT_PASSWORD** *(generate if unset)*
 - **MYSQL_USER** *(required)*
 - **MYSQL_PASSWORD** *(required)*
-- **BUILD_TYPE** *privileged (default) or rootless*
 
 ### Wordpress parameters
 
-## Start service
+nothing..
 
-using [make](https://fr.wikipedia.org/wiki/Make)
+### Build Type
 
-**build and start service as a deamon**
+```BUILD_TYPE``` can be set to **privileged** or **rootless**
 
-```bash
-make
+privileged means that docker has root permissions
 
-```
+scripts and service configurations changed to avoid permissions problems
 
-**Stop service and clean container and images**
-```bash
-make clean
-```
+## Ready for advanced use
 
-[more make rules](./Makefile)
+You can build, start, stop, clean docker with make
+
+Read [Makefile](./Makefile), ``man docker`` and ``man docker-compse``
 
 ## Links
 
@@ -67,4 +94,4 @@ make clean
 
 - [Yobasystems alpine-mariadb](https://github.com/yobasystems/alpine-mariadb)
 
-- [Digitalocean how-to-install-wordpress-with-docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose#step-1-defining-the-web-server-configuration)
+- [Digital Ocean how to install wordpress with docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose#step-1-defining-the-web-server-configuration)
