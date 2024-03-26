@@ -26,3 +26,14 @@ services:
     restart: unless-stopped
     ports:
       - ${NGINX_PORT:-443}:443
+  wordpress:
+    image: wordpress-${BUILD_TYPE:-privileged}-${NGINX_PORT:-443}
+    container_name: wordpress-${BUILD_TYPE:-privileged}-${NGINX_PORT:-443}
+    build:
+      context: ./requirements/wordpress
+    env_file: .env
+    environment:
+      - WORDPRESS_DB_HOST=mariadb:3306
+      - WORDPRESS_DB_USER=${MYSQL_USER}
+      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
+      - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
