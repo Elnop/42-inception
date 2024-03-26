@@ -1,4 +1,6 @@
-FROM yobasystems/alpine:3.19.1-amd64
+ARG ALPINE_VERSION=3.18.6
+
+FROM alpine:${ALPINE_VERSION}
 
 RUN apk add --no-cache bash curl less git tzdata zip \
     libmcrypt-dev zlib-dev gmp-dev \
@@ -19,10 +21,10 @@ RUN sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php81/php.ini && \
 ADD files/nginx.conf /etc/nginx/
 ADD files/php-fpm.conf /etc/php81/
 ADD files/run.sh /
-RUN chmod +x /run.sh && \
-    curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp-cli && chown nginx:nginx /usr/bin/wp-cli
+RUN chmod +x /run.sh
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/bin/wp-cli
+RUN chown nginx:nginx /usr/bin/wp-cli
 
-EXPOSE 80
-VOLUME ["/usr/html"]
-privileged
 CMD ["/run.sh"]
