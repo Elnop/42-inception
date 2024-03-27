@@ -2,29 +2,63 @@ ARG ALPINE_VERSION=3.18.6
 
 FROM alpine:${ALPINE_VERSION}
 
-RUN apk add --no-cache bash curl less git tzdata zip \
-    libmcrypt-dev zlib-dev gmp-dev \
-    freetype-dev libjpeg-turbo-dev libpng-dev \
-    php81-fpm php81-json php81-zlib php81-xml php81-xmlwriter php81-simplexml php81-pdo php81-phar php81-openssl \
-    php81-pdo_mysql php81-mysqli php81-session \
-    php81-gd php81-iconv php81-gmp php81-zip \
-    php81-curl php81-opcache php81-ctype php81-apcu \
-    php81-intl php81-bcmath php81-dom php81-mbstring php81-xmlreader mysql-client && apk add -u musl && \
-    rm -rf /var/cache/apk/*
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache \
+    curl \
+    php8 \
+    php8-fpm \
+    php8-opcache \
+    php8-mysqli \
+    php8-json \
+    php8-openssl \
+    php8-curl \
+    php8-zlib \
+    php8-gd \
+    php8-session \
+    php8-ctype \
+    php8-mbstring \
+    php8-dom \
+    php8-simplexml \
+    php8-tokenizer \
+    php8-xml \
+    php8-xmlwriter \
+    php8-xmlreader \
+    php8-posix \
+    php8-sockets \
+    php8-iconv \
+    php8-fileinfo \
+    php8-ldap \
+    php8-phar \
+    php8-intl \
+    php8-exif \
+    php8-pcntl \
+    php8-xmlrpc \
+    php8-posix \
+    php8-bcmath \
+    php8-pecl-imagick \
+    php8-pecl-redis \
+    php8-pear \
+    php8-dev \
+    php8-pear \
+    php8-zip \
+    imagemagick \
+    imagemagick-dev \
+    && rm -rf /var/cache/apk/*
 
-RUN sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php81/php.ini && \
-    sed -i 's/expose_php = On/expose_php = Off/g' /etc/php81/php.ini && \
-    sed -i "s/nginx:x:100:101:nginx:\/var\/lib\/nginx:\/sbin\/nologin/nginx:x:100:101:nginx:\/usr:\/bin\/bash/g" /etc/passwd && \
-    sed -i "s/nginx:x:100:101:nginx:\/var\/lib\/nginx:\/sbin\/nologin/nginx:x:100:101:nginx:\/usr:\/bin\/bash/g" /etc/passwd- && \
-    ln -s /sbin/php-fpm81 /sbin/php-fpm
+# Créer un répertoire pour le code source de WordPress
+RUN mkdir -p /var/www/html
 
-ADD files/nginx.conf /etc/nginx/
-ADD files/php-fpm.conf /etc/php81/
-ADD files/run.sh /
-RUN chmod +x /run.sh
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/bin/wp-cli
-RUN chown nginx:nginx /usr/bin/wp-cli
+# Télécharger et extraire WordPress
+RUN curl -o /tmp/wordpress.tar.gz -SL https://wordpress.org/latest.tar.gz && \
+    tar -xzf /tmp/wordpress.tar.gz -C /var/www/html --strip-components=1 && \
+    rm /tmp/wordpress.tar.gz
 
-CMD ["/run.sh"]
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Exposer le port 9000 pour PHP-FPM
+EXPOSE 9000
+
+# Commande par défaut pour démarrer PHP-FPM
+CMD ["php-fpm8", "-F"]
