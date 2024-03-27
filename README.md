@@ -14,6 +14,7 @@ This project serves as a learning exercise, employing Docker with Alpine to faci
 	- [Wordpress](#wordpress-parameters)
 	- [Build Type](#build-type)
 4. [Ready for advanced use](#ready-for-advanced-use)
+5. [Links](#links)
 
 ## Host dependencies
 
