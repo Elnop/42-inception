@@ -89,9 +89,8 @@ Read [Makefile](./Makefile), ``man docker`` and ``man docker-compse``
 ## Links
 
 - [PHP Doc](https://www.php.net/docs.php)
-
+- [PHP Supported Versions](https://www.php.net/supported-versions.php)
 - [Docker Reference](https://docs.docker.com/reference/)
-
-- [Yobasystems alpine-mariadb](https://github.com/yobasystems/alpine-mariadb)
-
+- [Yobasystems Docker Alpine Mariadb](https://github.com/yobasystems/alpine-mariadb)
+- [Yobasystems Alpine PHP Wordpress](https://github.com/yobasystems/alpine-php-wordpress)
 - [Digital Ocean how to install wordpress with docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose#step-1-defining-the-web-server-configuration)
