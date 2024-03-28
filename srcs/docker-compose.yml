@@ -12,11 +12,27 @@ services:
     env_file: .env
     volumes:
       - ./requirements/mariadb/db:/var/lib/mysql
-    restart: unless-stopped
     expose:
       - 3306
+    restart: unless-stopped
+    networks:
+      - inception_bridge
     # ports:
     #   - 3306:3306
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    build:
+      context: ./requirements/wordpress
+    env_file: .env
+    environment:
+      - WORDPRESS_DB_HOST=mariadb-${BUILD_TYPE:-privileged}:3306
+      - WORDPRESS_DB_USER=${MYSQL_USER}
+      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
+      - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
+    restart: unless-stopped
+    networks:
+      - inception_bridge
   nginx:
     image: nginx-${NGINX_PORT:-443}
     container_name: nginx-${NGINX_PORT:-443}
@@ -24,16 +40,10 @@ services:
       context: ./requirements/nginx
     env_file: .env
     restart: unless-stopped
+    networks:
+      - inception_bridge
     ports:
       - ${NGINX_PORT:-443}:443
-  wordpress:
-    image: wordpress-${BUILD_TYPE:-privileged}-${NGINX_PORT:-443}
-    container_name: wordpress-${BUILD_TYPE:-privileged}-${NGINX_PORT:-443}
-    build:
-      context: ./requirements/wordpress
-    env_file: .env
-    environment:
-      - WORDPRESS_DB_HOST=mariadb:3306
-      - WORDPRESS_DB_USER=${MYSQL_USER}
-      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
-      - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
+networks:
+  inception_bridge:
+    driver: bridge
