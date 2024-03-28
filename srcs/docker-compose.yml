@@ -66,5 +66,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/lperroti/data/wordpress #/home/lperroti/data/wordpress
+      device: ./wordpress #/home/lperroti/data/wordpress
       o: bind

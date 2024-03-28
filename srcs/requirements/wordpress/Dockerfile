@@ -21,8 +21,9 @@ RUN apk update && \
 
 RUN mkdir -p /var/www/html
 
-WORKDIR /var/www/html
-
 EXPOSE 9000
 
-CMD ["php-fpm81", "-F"]
+RUN mkdir scripts
+COPY tools/setup.sh scripts/setup.sh
+
+ENTRYPOINT [ "scripts/setup.sh" ]

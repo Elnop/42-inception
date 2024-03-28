@@ -9,3 +9,5 @@ $'\n'"define('DB_PASSWORD', '${WORDPRESS_DB_PASSWORD})'"; \
 $'\n'"define('DB_HOST', '${WORDPRESS_DB_HOST})'"; \
 >> wp-config.php
 fi
+
+php-fpm81 -F
