@@ -1,7 +1,9 @@
 # Variables can be set in .env file:
 #   BUILD_TYPE: privileged (default) or rootless
 #   NGINX_PORT: 443 (default)
+
 #version: 3
+
 services:
   mariadb:
     image: mariadb-${BUILD_TYPE:-privileged}
@@ -19,7 +21,10 @@ services:
       - inception_bridge
     # ports:
     #   - 3306:3306
+
   wordpress:
+    depends_on:
+      - mariadb
     image: wordpress
     container_name: wordpress
     build:
@@ -33,17 +38,33 @@ services:
     restart: unless-stopped
     networks:
       - inception_bridge
+    volumes:
+      - wordpress_data:/var/www/html
+
   nginx:
+    depends_on:
+      - wordpress
     image: nginx-${NGINX_PORT:-443}
     container_name: nginx-${NGINX_PORT:-443}
     build:
       context: ./requirements/nginx
     env_file: .env
     restart: unless-stopped
+    volumes:
+      - wordpress_data:/var/www/wordpress
     networks:
       - inception_bridge
     ports:
       - ${NGINX_PORT:-443}:443
+
 networks:
   inception_bridge:
     driver: bridge
+
+volumes:
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/lperroti/data/wordpress #/home/lperroti/data/wordpress
+      o: bind

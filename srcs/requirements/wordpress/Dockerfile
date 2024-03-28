@@ -21,19 +21,8 @@ RUN apk update && \
 
 RUN mkdir -p /var/www/html
 
-RUN curl -o /tmp/wordpress.tar.gz -SL https://wordpress.org/latest.tar.gz
-RUN tar -xzf /tmp/wordpress.tar.gz -C /var/www/html --strip-components=1
-RUN rm /tmp/wordpress.tar.gz
-
 WORKDIR /var/www/html
 
-RUN echo \
-$'\n'"define('DB_NAME', '${WORDPRESS_DB_NAME})'"; \
-$'\n'"define('DB_USER', '${WORDPRESS_DB_USER})'"; \
-$'\n'"define('DB_PASSWORD', '${WORDPRESS_DB_PASSWORD})'"; \
-$'\n'"define('DB_HOST', '${WORDPRESS_DB_HOST})'"; \
->> wp-config.php
-
-# EXPOSE 9000
+EXPOSE 9000
 
 CMD ["php-fpm81", "-F"]

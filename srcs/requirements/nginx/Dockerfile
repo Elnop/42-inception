@@ -12,4 +12,6 @@ RUN openssl req -x509 -nodes -out /etc/nginx/ssl/certificate.crt -keyout /etc/ng
 
 RUN mkdir -p /run/nginx
 
+RUN mkdir -p /var/www/wordpress
+
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,7 +1,8 @@
 include srcs/.env
 
 COMPOSE_FILE	:= ./srcs/docker-compose.yml
-IMAGE_NAMES		:= mariadb-${BUILD_TYPE} nginx-${NGINX_PORT}
+IMAGE_NAMES		:= mariadb-${BUILD_TYPE} nginx-${NGINX_PORT} wordpress
+VOLUME_NAMES	:= srcs_wordpress_data
 
 # Build, (re)create, start and attach to containers
 up: build
@@ -30,6 +31,10 @@ down:
 kill:
 	docker-compose -f ${COMPOSE_FILE} kill
 
+# Remove unused volumes
+clean-volumes:
+	docker volume rm -f ${VOLUME_NAMES}
+
 # Remove unused images
 clean-images:
 	docker image rm -f ${IMAGE_NAMES}
@@ -38,7 +43,7 @@ clean-images:
 clean-containers: stop
 	docker-compose -f ${COMPOSE_FILE} rm
 
-clean: clean-containers clean-images
+clean: clean-containers clean-images clean-volumes
 
 # rtfm
 man:
