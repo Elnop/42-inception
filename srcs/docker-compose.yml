@@ -39,7 +39,7 @@ services:
     networks:
       - inception_bridge
     volumes:
-      - wordpress_data:/var/www/html
+      - ./requirements/wordpress/web_site:/var/www/html
 
   nginx:
     depends_on:
@@ -51,7 +51,7 @@ services:
     env_file: .env
     restart: unless-stopped
     volumes:
-      - wordpress_data:/var/www/wordpress
+      - ./requirements/wordpress/web_site:/var/www/wordpress
     networks:
       - inception_bridge
     ports:
@@ -61,10 +61,18 @@ networks:
   inception_bridge:
     driver: bridge
 
-volumes:
-  wordpress_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./wordpress #/home/lperroti/data/wordpress
-      o: bind
+# volumes:
+#   wordpress_data:
+#     name: wordpress
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: ./requirements/wordpress/web_site # /home/lperroti/data/wordpress
+#       o: bind
+#   database:
+#     name: database
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: bind
+#       device: ./requirements/mariadb/db # /home/lperroti/data/mariadb

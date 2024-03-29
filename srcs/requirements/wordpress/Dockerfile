@@ -23,7 +23,8 @@ RUN mkdir -p /var/www/html
 
 EXPOSE 9000
 
-RUN mkdir scripts
-COPY tools/setup.sh scripts/setup.sh
+RUN mkdir -p scripts
+COPY tools/setup.sh /scripts/setup.sh
+RUN chmod -R +x /scripts
 
-ENTRYPOINT [ "scripts/setup.sh" ]
+ENTRYPOINT [ "/scripts/setup.sh" ]
