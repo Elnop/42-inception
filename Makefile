@@ -45,6 +45,8 @@ clean-containers: stop
 
 clean: clean-containers clean-images clean-volumes
 
+re: clean up
+
 # rtfm
 man:
 	man docker-compose
