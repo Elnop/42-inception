@@ -1,6 +1,8 @@
 # Variables can be set in .env file:
 #   BUILD_TYPE: privileged (default) or rootless
 #   NGINX_PORT: 443 (default)
+#   DB_VOLUME: ./requirements/mariadb/db (default)
+#   WEBSITE_VOLUME: ./requirements/mariadb/db (default)
 
 version: "3"
 services:
@@ -31,9 +33,6 @@ services:
     env_file: .env
     environment:
       - WORDPRESS_DB_HOST=mariadb-${BUILD_TYPE:-privileged}:3306
-      - WORDPRESS_DB_USER=${MYSQL_USER}
-      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
-      - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
     restart: unless-stopped
     networks:
       - inception_bridge
